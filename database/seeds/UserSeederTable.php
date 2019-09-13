@@ -17,37 +17,34 @@ class UserSeederTable extends Seeder
         DB::table('users')->truncate();
         DB::table('user_roles')->truncate();
 
-        $role_admin    = Role::where('name', 'Admin')->first();
-        $role_manager  = Role::where('name', 'Manager')->first();
-        $role_staff    = Role::where('name', 'Staff')->first();
-        $role_customer = Role::where('name', 'Customer')->first();
+        $sa  = Role::where('name', 'SA')->first();
+        $do  = Role::where('name', 'DO')->first();
+        $ds  = Role::where('name', 'DS')->first();
+        $td  = Role::where('name', 'TD')->first();
+        $ad  = Role::where('name', 'AD')->first();
 
-        $admin = new User();
-        $admin->name = 'Admin Admin';
-        $admin->email = 'admin@chedro.com';
-        $admin->password = bcrypt('password');
-        $admin->save();
-        $admin->roles()->attach($role_admin);
+        $rs  = Role::where('name', 'RS')->first();
+        $es  = Role::where('name', 'ES')->first();
+        $pacd  = Role::where('name', 'PACD')->first();
+        $soic  = Role::where('name', 'SOIC')->first();
+        $cash  = Role::where('name', 'CASHIER')->first();
 
-        $manager = new User();
-        $manager->name = 'Manager Manager';
-        $manager->email = 'manager@chedro.com';
-        $manager->password = bcrypt('password');
-        $manager->save();
-        $manager->roles()->attach($role_manager);
+        $ceps  = Role::where('name', 'CEPS')->first();
 
-        $staff = new User();
-        $staff->name = 'Staff Staff';
-        $staff->email = 'staff@chedro.com';
-        $staff->password = bcrypt('password');
-        $staff->save();
-        $staff->roles()->attach($role_staff);
+        $super_user = new User();
+        $super_user->name = 'Super Admin';
+        $super_user->email = 'super@chedro.com';
+        $super_user->password = bcrypt('1234');
+        $super_user->save();
+        $super_user->roles()->attach($sa);
 
-        $customer = new User();
-        $customer->name = 'Customer Customer';
-        $customer->email = 'customer@chedro.com';
-        $customer->password = bcrypt('password');        
-        $customer->save();
-        $customer->roles()->attach($role_customer);
+        $pacd_user = new User();
+        $pacd_user->name = 'Front Line PACD';
+        $pacd_user->email = 'pacd@chedro.com';
+        $pacd_user->password = bcrypt('1234');
+        $pacd_user->save();
+        $pacd_user->roles()->attach($pacd);
+
+        
     }
 }
