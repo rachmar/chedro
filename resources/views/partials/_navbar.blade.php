@@ -1,8 +1,8 @@
 <header class="main-header">
 
   <a href="{{url('home')}}" class="logo">
-    <span class="logo-mini"><b>{{ config('app.shortcut', 'KRL') }}</b></span>
-    <span class="logo-lg"><b>{{ config('app.name', 'Laravel') }}</b></span>
+    <span class="logo-mini"><b>{{ config('app.shortcut', 'CHR') }}</b></span>
+    <span class="logo-lg"><b>{{ config('app.name', 'CHEDRO') }}</b></span>
   </a>
 
   <nav class="navbar navbar-static-top" role="navigation">

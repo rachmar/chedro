@@ -41,7 +41,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Model\Role', 'user_roles', 'user_id', 'role_id');
     }
-    
+
+    public function transactions()
+    {
+        return $this->belongsToMany('App\Model\Transaction', 'transaction_roles', 'user_id', 'transaction_id');
+    }
+
     public function hasAnyRole($roles)
     {
         if (is_array($roles))
@@ -67,23 +72,20 @@ class User extends Authenticatable
         return false;
     }
 
-    public function isAdmin()
+    public function isSuperAdmin()
     {
-        return $this->hasRole('Admin');
+        return $this->hasRole('SA');
     }
 
-    public function isManager()
+    public function isPACD()
     {
-        return $this->hasRole('Manager');
+        return $this->hasRole('PACD');
     }
 
-    public function isStaff()
+    public function isSC()
     {
-        return $this->hasRole('Staff');
+        return $this->hasRole('SC');
     }
 
-    public function isCustomer()
-    {
-        return $this->hasRole('Customer');
-    }
+
 }

@@ -31,21 +31,28 @@
     </li>
 
     <!-- Start Admin -->
-    @if (Auth::user()->isAdmin())
+    @if (Auth::user()->isPACD())
 
-      <li class="{{ Request::segment(3) === 'buy' ? 'active' : '' }}">
-        <a href="{{ url('admin/search/buy')}}">
+      <li class="{{ Request::segment(2) === 'transaction' ? 'active' : '' }}">
+        <a href="{{ url('admin/transaction')}}">
           <i class="fa  fa-building-o" aria-hidden="true"></i>
-            <span>Buy Metal</span>
+            <span>Generate Transaction</span>
         </a>
       </li>
 
     @endif
 
+    @if (Auth::user()->isSC())
 
+      <li class="{{ Request::segment(2) === 'track' ? 'active' : '' }}">
+        <a href="{{ url('admin/track')}}">
+          <i class="fa  fa-building-o" aria-hidden="true"></i>
+            <span>Track</span>
+        </a>
+      </li>
 
+    @endif
 
-    
 
   </ul>
 

@@ -17,57 +17,72 @@ class RoleSeederTable extends Seeder
         
         $sa = new Role();
         $sa->name = 'SA';
-        $sa->description = 'Super Admin';
+        $sa->description = 'SUPER ADMIN';
         $sa->save();
 
         $do = new Role();
-        $do->name = 'DO';
-        $do->description = 'Director’s Office';
+        $do->name = 'CEPS';
+        $do->description = 'CEPS';
         $do->save();
 
         $ds = new Role();
-        $ds->name = 'DS';
-        $ds->description = 'Director’s Secretary';
+        $ds->name = 'ESII';
+        $ds->description = 'ESII';
         $ds->save();
 
         $td = new Role();
-        $td->name = 'TD';
-        $td->description = 'Technical Division';
+        $td->name = 'EPS';
+        $td->description = 'EPS';
         $td->save();
 
         $ad = new Role();
-        $ad->name = 'AD';
-        $ad->description = 'Adminstrative Division';
+        $ad->name = 'CAO';
+        $ad->description = 'CAO';
         $ad->save();
 
         $rs = new Role();
-        $rs->name = 'RS';
-        $rs->description = 'Record’s Section';
+        $rs->name = 'RECORDS';
+        $rs->description = 'RECORDS';
         $rs->save();
 
         $es = new Role();
-        $es->name = 'ES';
-        $es->description = 'Education Supervisor';
+        $es->name = 'ACCT';
+        $es->description = 'ACCT';
         $es->save();
 
         $pacd = new Role();
         $pacd->name = 'PACD';
-        $pacd->description = 'Front Line / PACD';
+        $pacd->description = 'PACD';
         $pacd->save();
 
         $soic = new Role();
-        $soic->name = 'SOIC';
-        $soic->description = 'Special Order In-charge';
+        $soic->name = 'SC';
+        $soic->description = 'SC';
         $soic->save();
 
         $cash = new Role();
         $cash->name = 'CASHIER';
-        $cash->description = 'Cashier';
+        $cash->description = 'CASHIER';
         $cash->save();
 
         $ceps = new Role();
-        $ceps->name = 'CEPS';
-        $ceps->description = 'CEPS';
+        $ceps->name = 'PURCHASER';
+        $ceps->description = 'PURCHASER';
+        $ceps->save();
+
+        $ceps = new Role();
+        $ceps->name = 'KTO12';
+        $ceps->description = 'KTO12';
+        $ceps->save();
+
+        $ceps = new Role();
+        $ceps->name = 'UNIFAST';
+        $ceps->description = 'UNIFAST';
+        $ceps->save();
+
+        $ceps = new Role();
+        $ceps->name = 'STUFAPS';
+        $ceps->description = 'STUFAPS';
         $ceps->save();
         
     }
