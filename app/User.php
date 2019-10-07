@@ -42,11 +42,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Model\Role', 'user_roles', 'user_id', 'role_id');
     }
 
-    public function transactions()
-    {
-        return $this->belongsToMany('App\Model\Transaction', 'transaction_roles', 'user_id', 'transaction_id');
-    }
-
+ 
     public function hasAnyRole($roles)
     {
         if (is_array($roles))
@@ -82,9 +78,19 @@ class User extends Authenticatable
         return $this->hasRole('PACD');
     }
 
-    public function isSC()
+    public function isSECT()
     {
-        return $this->hasRole('SC');
+        return $this->hasRole('SECT');
+    }
+
+    public function isCAO()
+    {
+        return $this->hasRole('CAO');
+    }
+
+    public function isCEPS()
+    {
+        return $this->hasRole('CEPS');
     }
 
 

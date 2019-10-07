@@ -18,11 +18,8 @@ class TrackController extends Controller
     public function index()
     {
         //
-        $transactions = Transaction::whereHas('users', function($q){
-            $id = Auth::user()->id;
-            $q->where('user_id', $id);
-        })->get();
-
+        $id = Auth::user()->id;
+        $transactions = Transaction::where('assign_id', $id)->get();
         return view('pages.track.index',compact('transactions'));
     }
 
@@ -60,12 +57,15 @@ class TrackController extends Controller
 
         $transaction = Transaction::find($id);
 
+        $status = Status::find($transaction->status_id);
+
         $workers = User::whereHas('roles', function($q){
-            $q->where('roles.name', '<>', 'SA');
+            $q->where('roles.name', '<>', 'ADMIN');
+            $q->where('roles.name', '<>', 'PACD');
             $q->where('users.id', '<>',  Auth::user()->id);
         })->get();
 
-        return view('pages.track.show',compact('transaction', 'workers','statuses'));
+        return view('pages.track.show',compact('transaction', 'workers','statuses' , 'status'));
     }
 
     /**
@@ -92,13 +92,8 @@ class TrackController extends Controller
         $transaction = Transaction::find($id);
         $transaction->status_id = $request->status;
         $transaction->priority_id = $request->priority;
+        $transaction->assign_id = $request->assign;
         $transaction->save();
-        
-        $user_detach = User::find(Auth::user()->id);
-        $user_detach->transactions()->detach();
-
-        $user_attach = User::find($request->assign);
-        $user_attach->transactions()->attach($transaction);
 
         return redirect('admin/track')->with(['title'=>'Edited!','status'=>'User Succesfully Edited!','mode'=>'success']);
     }

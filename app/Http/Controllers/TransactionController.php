@@ -17,9 +17,11 @@ class TransactionController extends Controller
     public function index()
     {
         $documents = Document::get();
+        
         $control_id = uniqid();
+
         $secretaries = User::whereHas('roles', function($q){
-            $q->where('name', 'SC');
+            $q->where('name', 'SECT');
         })->get();
 
         return view('pages.transaction.index',compact('documents','control_id','secretaries'));
@@ -50,15 +52,11 @@ class TransactionController extends Controller
         $transaction->control_id =  $request->control_id;
         $transaction->document_id =  $request->document_id;
         $transaction->from =  $request->from;
+        $transaction->assign_id =  $request->secretary_id;
         $transaction->subject =  $request->subject;
         $transaction->details =  $request->details;
         $transaction->comments = $request->comments;
         $transaction->save();
-
-        $secretary = User::find($request->secretary_id);
-        $secretary->transactions()->attach($transaction);
-        $secretary->save();
-
 
         return redirect()->back()->with(['title'=>'Added!','status'=>'Successfully Added!','mode'=>'success']);
     }

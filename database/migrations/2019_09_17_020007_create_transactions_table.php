@@ -19,6 +19,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('document_id')->default(0);
             $table->integer('status_id')->default(0);
             $table->integer('priority_id')->default(0);
+            $table->integer('assign_id')->default(0);
             $table->string('from');
             $table->string('subject');
             $table->text('details');

@@ -16,8 +16,8 @@ class RoleSeederTable extends Seeder
         DB::table('roles')->truncate();
         
         $sa = new Role();
-        $sa->name = 'SA';
-        $sa->description = 'SUPER ADMIN';
+        $sa->name = 'ADMIN';
+        $sa->description = 'ADMIN';
         $sa->save();
 
         $do = new Role();
@@ -56,8 +56,8 @@ class RoleSeederTable extends Seeder
         $pacd->save();
 
         $soic = new Role();
-        $soic->name = 'SC';
-        $soic->description = 'SC';
+        $soic->name = 'SECT';
+        $soic->description = 'SECT';
         $soic->save();
 
         $cash = new Role();

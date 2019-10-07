@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <form action="#" method="get" class="sidebar-form">
+<!--   <form action="#" method="get" class="sidebar-form">
     <div class="input-group">
       <input type="text" name="q" class="form-control" placeholder="Search...">
       <span class="input-group-btn">
@@ -18,17 +18,17 @@
           </button>
         </span>
     </div>
-  </form>
+  </form> -->
 
   <ul class="sidebar-menu" data-widget="tree">
-    <li class="header">Settings</li>
+    <li class="header">Options</li>
 
-    <li class="{{ Request::is('home') ? 'active' : '' }}">
+    <!-- <li class="{{ Request::is('home') ? 'active' : '' }}">
       <a href="{{ url('home') }}">
         <i class="fa fa-home"></i>
           <span>Home</span>
       </a>
-    </li>
+    </li> -->
 
     <!-- Start Admin -->
     @if (Auth::user()->isPACD())
@@ -36,13 +36,20 @@
       <li class="{{ Request::segment(2) === 'transaction' ? 'active' : '' }}">
         <a href="{{ url('admin/transaction')}}">
           <i class="fa  fa-building-o" aria-hidden="true"></i>
-            <span>Generate Transaction</span>
+            <span>Generate Route</span>
+        </a>
+      </li>
+
+      <li class="{{ Request::segment(2) === 'search' ? 'active' : '' }}">
+        <a href="{{ url('admin/search')}}">
+          <i class="fa  fa-building-o" aria-hidden="true"></i>
+            <span>Track Control Num</span>
         </a>
       </li>
 
     @endif
 
-    @if (Auth::user()->isSC())
+    @if (Auth::user()->isSECT() || Auth::user()->isCAO() || Auth::user()->isCEPS())
 
       <li class="{{ Request::segment(2) === 'track' ? 'active' : '' }}">
         <a href="{{ url('admin/track')}}">

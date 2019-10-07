@@ -12,7 +12,8 @@
     </a>
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
-        <li class="dropdown messages-menu">
+        
+       <!--  <li class="dropdown messages-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-envelope-o"></i>
             <span class="label label-success">4</span>
@@ -38,7 +39,7 @@
             <li class="footer"><a href="#">See All Messages</a></li>
           </ul>
         </li>
-
+ -->
         <li class="dropdown notifications-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-bell-o"></i>
@@ -66,7 +67,7 @@
             <span class="hidden-xs">{{ Auth::user()->name }}</span>
           </a>
           <ul class="dropdown-menu">
-            <li class="user-header">
+<!--             <li class="user-header">
               <img src="https://raw.githubusercontent.com/Infernus101/ProfileUI/0690f5e61a9f7af02c30342d4d6414a630de47fc/icon.png" class="img-circle" alt="User Image">
               <p>
                 {{ Auth::user()->name }}
@@ -84,13 +85,13 @@
                   <a href="#">Friends</a>
                 </div>
               </div>
-            </li>
+            </li> -->
             <li class="user-footer">
-              <div class="pull-left">
+              <!-- <div class="pull-left">
                 <a href="#" class="btn btn-default btn-flat">Profile</a>
-              </div>
-              <div class="pull-right">
-
+              </div> -->
+<!--               <div class="pull-right">
+ -->
                 <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
                      onclick="event.preventDefault();
                                    document.getElementById('logout-form').submit();">
@@ -100,8 +101,8 @@
                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                       @csrf
                   </form>
-              </div>
-            </li>
+<!--               </div>
+ -->            </li>
           </ul>
         </li>
       </ul>
