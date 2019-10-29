@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Auth;
 use App\User;
 use App\Model\Status;
+use App\Model\Log;
+
 use App\Model\Transaction;
 use Illuminate\Http\Request;
+
 
 class TrackController extends Controller
 {
@@ -19,7 +22,10 @@ class TrackController extends Controller
     {
         //
         $id = Auth::user()->id;
-        $transactions = Transaction::where('assign_id', $id)->get();
+        $transactions = Transaction::select('transactions.*','status.name')
+            ->join('status', 'transactions.status_id', '=', 'status.id')
+            ->where('assign_id', $id)
+            ->get();
         return view('pages.track.index',compact('transactions'));
     }
 
@@ -95,7 +101,15 @@ class TrackController extends Controller
         $transaction->assign_id = $request->assign;
         $transaction->save();
 
-        return redirect('admin/track')->with(['title'=>'Edited!','status'=>'User Succesfully Edited!','mode'=>'success']);
+
+        $user = User::find($request->assign);
+
+        $log = new Log;
+        $log->user_id = Auth::user()->id;
+        $log->description = "TRANSFER CONTROL NUM ".$transaction->control_id."  TO ".$user->name."  ON ";
+        $log->save();
+
+        return redirect('track')->with(['title'=>'Edited!','status'=>'User Succesfully Edited!','mode'=>'success']);
     }
 
     /**

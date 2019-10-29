@@ -17,12 +17,10 @@ class CreateTransactionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('control_id');
             $table->integer('document_id')->default(0);
-            $table->integer('status_id')->default(0);
+            $table->integer('status_id')->default(1);
             $table->integer('priority_id')->default(0);
             $table->integer('assign_id')->default(0);
-            $table->string('from');
             $table->string('subject');
-            $table->text('details');
             $table->text('comments')->nullable();
             $table->timestamps();
         });

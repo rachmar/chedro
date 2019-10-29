@@ -17,6 +17,10 @@ class StatusSeederTable extends Seeder
         DB::table('status')->truncate();
         
         $status = new Status();
+        $status->name = 'No Action Set';
+        $status->save();
+
+        $status = new Status();
         $status->name = 'Action Please';
         $status->save();
 

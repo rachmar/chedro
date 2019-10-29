@@ -31,15 +31,16 @@
 	        
 	      </div>
 
-	      <div class="box-body">
-              <dl>
-                <dt>Subject</dt>
-                <dd>{{ $transaction->subject }}</dd>
-                <dt>Details</dt>
-                <dd>{{ $transaction->details }}</dd>
-                <dt>Comments</dt>
-                <dd>{{ $transaction->comments }}</dd>
-              </dl>
+	       <div class="box-body">
+          		<dl>
+		            <dt>Subject</dt>
+		            <dd>{{ $transaction->subject }}</dd>
+		            <dt>Comments</dt>
+		            <dd>{{ $transaction->comments }}</dd>
+		         </dl>
+        	</div>
+        	<div class="box-footer text-center">
+              <a href="{{ route('track.index') }}" class="uppercase">Go Back</a>
             </div>
 
 	    </div>
@@ -51,7 +52,7 @@
             {{csrf_field()}}
     		<div class="row">
 
-    			@if (Auth::user()->isSECT())
+    			@if (Auth::user()->isSECRETARY())
 			  		<div class="col-md-12">
 			  			<div class="box box-primary">
 					    	<div class="box-body">
@@ -78,6 +79,11 @@
 					        </div>
 					    </div>
 			  		</div>
+			  	@else
+
+			  		<input type="hidden" name="status" value="{{ $transaction->status_id }}">
+			  		<input type="hidden" name="priority" value="{{ $transaction->priority_id }}">
+
 				@endif
 
 		  		<div class="col-md-12">
@@ -104,7 +110,7 @@
 
 @section('script')
 
-	@if (Auth::user()->isSECT())
+	@if (Auth::user()->isSECRETARY())
 		<script type="text/javascript">
 
 			$("#status").change(function (e) {

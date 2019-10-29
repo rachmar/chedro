@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\User;
 use App\Model\Document;
 use App\Model\Transaction;
+use App\Model\Log;
+
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -21,10 +24,16 @@ class TransactionController extends Controller
         $control_id = uniqid();
 
         $secretaries = User::whereHas('roles', function($q){
-            $q->where('name', 'SECT');
+            $q->where('name', 'SECRETARY');
         })->get();
 
-        return view('pages.transaction.index',compact('documents','control_id','secretaries'));
+        $transactions = Transaction::join('documents', 'transactions.document_id', '=', 'documents.id')
+            ->where('status_id', 1)
+            ->where('priority_id', 0)
+            ->get();
+
+        return view('pages.transaction.index',compact('documents','control_id','secretaries' , 'transactions'));
+
 
     }
 
@@ -47,16 +56,19 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
 
-
         $transaction = new Transaction;
         $transaction->control_id =  $request->control_id;
         $transaction->document_id =  $request->document_id;
-        $transaction->from =  $request->from;
         $transaction->assign_id =  $request->secretary_id;
         $transaction->subject =  $request->subject;
-        $transaction->details =  $request->details;
         $transaction->comments = $request->comments;
         $transaction->save();
+
+        $log = new Log;
+        $log->user_id = Auth::user()->id;
+        $log->description = "GENERATE TRANSACTION USING CONTROL NUM ".$request->control_id." ON";
+        $log->save();
+
 
         return redirect()->back()->with(['title'=>'Added!','status'=>'Successfully Added!','mode'=>'success']);
     }

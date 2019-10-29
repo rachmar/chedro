@@ -15,75 +15,69 @@ class RoleSeederTable extends Seeder
     {
         DB::table('roles')->truncate();
         
-        $sa = new Role();
-        $sa->name = 'ADMIN';
-        $sa->description = 'ADMIN';
-        $sa->save();
+        $ADMIN = new Role();
+        $ADMIN->name = 'ADMIN';
+        $ADMIN->description = 'ADMIN';
+        $ADMIN->save();
 
-        $do = new Role();
-        $do->name = 'CEPS';
-        $do->description = 'CEPS';
-        $do->save();
 
-        $ds = new Role();
-        $ds->name = 'ESII';
-        $ds->description = 'ESII';
-        $ds->save();
+        // TECHNICAL DIVISION
 
-        $td = new Role();
-        $td->name = 'EPS';
-        $td->description = 'EPS';
-        $td->save();
+        $CEPS = new Role();
+        $CEPS->name = 'CEPS';
+        $CEPS->description = 'CEPS';
+        $CEPS->save();
 
-        $ad = new Role();
-        $ad->name = 'CAO';
-        $ad->description = 'CAO';
-        $ad->save();
+        $ESII = new Role();
+        $ESII->name = 'ESII';
+        $ESII->description = 'ESII';
+        $ESII->save();
 
-        $rs = new Role();
-        $rs->name = 'RECORDS';
-        $rs->description = 'RECORDS';
-        $rs->save();
+        $EPS = new Role();
+        $EPS->name = 'EPS';
+        $EPS->description = 'EPS';
+        $EPS->save();
 
-        $es = new Role();
-        $es->name = 'ACCT';
-        $es->description = 'ACCT';
-        $es->save();
+        // END TECHNICAL DIVISION
 
-        $pacd = new Role();
-        $pacd->name = 'PACD';
-        $pacd->description = 'PACD';
-        $pacd->save();
+        // ADMINISTRATIVE
 
-        $soic = new Role();
-        $soic->name = 'SECT';
-        $soic->description = 'SECT';
-        $soic->save();
+        $CAO = new Role();
+        $CAO->name = 'CAO';
+        $CAO->description = 'CAO';
+        $CAO->save();
 
-        $cash = new Role();
-        $cash->name = 'CASHIER';
-        $cash->description = 'CASHIER';
-        $cash->save();
+        $ACCT = new Role();
+        $ACCT->name = 'ACCT';
+        $ACCT->description = 'ACCT';
+        $ACCT->save();
 
-        $ceps = new Role();
-        $ceps->name = 'PURCHASER';
-        $ceps->description = 'PURCHASER';
-        $ceps->save();
+        $SECRETARY = new Role();
+        $SECRETARY->name = 'SECRETARY';
+        $SECRETARY->description = 'SECRETARY';
+        $SECRETARY->save();
 
-        $ceps = new Role();
-        $ceps->name = 'KTO12';
-        $ceps->description = 'KTO12';
-        $ceps->save();
+        $CASHIER = new Role();
+        $CASHIER->name = 'CASHIER';
+        $CASHIER->description = 'CASHIER';
+        $CASHIER->save();
 
-        $ceps = new Role();
-        $ceps->name = 'UNIFAST';
-        $ceps->description = 'UNIFAST';
-        $ceps->save();
+        $RECORD = new Role();
+        $RECORD->name = 'RECORD';
+        $RECORD->description = 'RECORD';
+        $RECORD->save();
 
-        $ceps = new Role();
-        $ceps->name = 'STUFAPS';
-        $ceps->description = 'STUFAPS';
-        $ceps->save();
+        $PACD = new Role();
+        $PACD->name = 'PACD';
+        $PACD->description = 'PACD';
+        $PACD->save();
+
+        $PURCHASER = new Role();
+        $PURCHASER->name = 'PURCHASER';
+        $PURCHASER->description = 'PURCHASER';
+        $PURCHASER->save();
+
+        // END ADMINISTRATIVE
         
     }
 }

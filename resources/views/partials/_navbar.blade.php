@@ -39,7 +39,7 @@
             <li class="footer"><a href="#">See All Messages</a></li>
           </ul>
         </li>
- -->
+ 
         <li class="dropdown notifications-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-bell-o"></i>
@@ -54,13 +54,12 @@
                     <i class="fa fa-users text-aqua"></i> 5 new members joined today
                   </a>
                 </li>
-                <!-- end notification -->
               </ul>
             </li>
             <li class="footer"><a href="#">View all</a></li>
           </ul>
         </li>
-
+-->
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <img src="https://raw.githubusercontent.com/Infernus101/ProfileUI/0690f5e61a9f7af02c30342d4d6414a630de47fc/icon.png" class="user-image" alt="User Image">

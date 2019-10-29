@@ -4,50 +4,55 @@
 
 @section('content')
 <div class="row">
-  <div class="col-md-12">
-    <div class="box box-primary">
-      <div class="box-body">
-        <table id="datatable" class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Control ID</th>
-              <th>Action</th>         
-            </tr>
-          </thead>
 
-          <tbody>
+  @foreach ($transactions as $transaction)
 
-            @foreach ($transactions as $transaction)
-                <tr>
-                  <td>{{ $transaction->created_at->format('d/m/Y') }}</td>
-                  <td>{{ $transaction->control_id }}</td>
-                  <td>
-                    <a href="{{ route('track.show', $transaction->id ) }}" class="btn btn-sm btn-warning">
-                        View Details
-                    </a>
-                  </td>
-                </tr>
-            @endforeach
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Date</th>
-              <th>Control ID</th>
-              <th>Action</th>         
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+    <div class="col-md-6">
+        <div class="box box-widget">
+            <div class="box-header with-border">
+              <div class="user-block">
+                <img class="img-circle" src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Commission_on_Higher_Education_%28CHEd%29.svg" alt="User Image">
+                <span class="username"><a href="#"> Control ID: {{ $transaction->control_id }}</a></span>
+                <span class="description">
+
+                  @if ( $transaction->priority_id === 1 )
+                     <span class="label  bg-green">Lease Priority</span>
+                  @elseif ( $transaction->priority_id === 2 )
+                     <span class="label  bg-yellow">Mid Priority</span>
+                  @elseif ( $transaction->priority_id === 3 )
+                     <span class="label  bg-red">High Priority</span>
+                  @else
+                     <span class="label  bg-blue">No Priority Set</span>
+                  @endif
+
+                  @if ( $transaction->status_id != 0 )
+                     <span class="label bg-maroon">{{$transaction->name}}</span>
+                  @else
+                     <span class="label bg-maroon">No Action Set</span>
+                  @endif
+
+                  <span class="pull-right"> {{ $transaction->created_at->format('d/m/Y H:m')}}   </span>
+                </span>
+     
+              </div>
+
+            </div>
+
+            <div class="box-footer text-center">
+              <a href="{{ route('track.show', $transaction->id ) }}" class="uppercase">View Details</a>
+            </div>
+        </div>
     </div>
-  </div>
+
+  @endforeach
+
 </div>
 @endsection
 
 @section('script')
 <script type="text/javascript">
     $( document ).ready(function() {
-      $('#datatable').DataTable();
+      
     });
 </script>
 @endsection

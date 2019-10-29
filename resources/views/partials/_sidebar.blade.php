@@ -31,35 +31,60 @@
     </li> -->
 
     <!-- Start Admin -->
+
+    @if (Auth::user()->isADMIN())
+
+      <li class="{{ Request::segment(2) === 'user' ? 'active' : '' }}">
+        <a href="{{ url('admin/user')}}">
+          <i class="fa  fa-building-o" aria-hidden="true"></i>
+            <span>Users</span>
+        </a>
+      </li>
+
+       <li class="{{ Request::segment(2) === 'document' ? 'active' : '' }}">
+        <a href="{{ url('admin/document')}}">
+          <i class="fa  fa-building-o" aria-hidden="true"></i>
+            <span>Documents</span>
+        </a>
+      </li>
+
+       <li class="{{ Request::segment(2) === 'log' ? 'active' : '' }}">
+        <a href="{{ url('admin/log')}}">
+          <i class="fa  fa-building-o" aria-hidden="true"></i>
+            <span>Logs</span>
+        </a>
+      </li>
+
+      <li class="{{ Request::segment(2) === 'log' ? 'active' : '' }}">
+        <a href="{{ url('admin/log')}}">
+          <i class="fa  fa-building-o" aria-hidden="true"></i>
+            <span>Reports</span>
+        </a>
+      </li>
+
+    @endif
+
     @if (Auth::user()->isPACD())
 
       <li class="{{ Request::segment(2) === 'transaction' ? 'active' : '' }}">
-        <a href="{{ url('admin/transaction')}}">
+        <a href="{{ url('pacd/transaction')}}">
           <i class="fa  fa-building-o" aria-hidden="true"></i>
-            <span>Generate Route</span>
-        </a>
-      </li>
-
-      <li class="{{ Request::segment(2) === 'search' ? 'active' : '' }}">
-        <a href="{{ url('admin/search')}}">
-          <i class="fa  fa-building-o" aria-hidden="true"></i>
-            <span>Track Control Num</span>
+            <span>Generate Transaction</span>
         </a>
       </li>
 
     @endif
 
-    @if (Auth::user()->isSECT() || Auth::user()->isCAO() || Auth::user()->isCEPS())
+    @if (Auth::user()->isCEPS() || Auth::user()->isESII() || Auth::user()->isEPS() || Auth::user()->isCAO() || Auth::user()->isACCT() || Auth::user()->isSECRETARY() || Auth::user()->isCASHIER() || Auth::user()->isRECORD() || Auth::user()->isPURCHASER() )
 
-      <li class="{{ Request::segment(2) === 'track' ? 'active' : '' }}">
-        <a href="{{ url('admin/track')}}">
+      <li class="{{ Request::segment(1) === 'track' ? 'active' : '' }}">
+        <a href="{{ url('track')}}">
           <i class="fa  fa-building-o" aria-hidden="true"></i>
-            <span>Track</span>
+            <span>Transactions</span>
         </a>
       </li>
 
     @endif
-
 
   </ul>
 

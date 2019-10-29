@@ -17,47 +17,117 @@ class UserSeederTable extends Seeder
         DB::table('users')->truncate();
         DB::table('user_roles')->truncate();
 
-        $admin  = Role::where('name', 'ADMIN')->first();
-        $pacd  = Role::where('name', 'PACD')->first();
-        $sect  = Role::where('name', 'SECT')->first();
-        $cao  = Role::where('name', 'CAO')->first();
-        $ceps  = Role::where('name', 'CAO')->first();
+        $ADMIN  = Role::where('name', 'ADMIN')->first();
 
         $user = new User();
         $user->name = 'ADMIN ADMIN';
         $user->email = 'admin@chedro.com';
-        $user->password = bcrypt('password');
+        $user->password = bcrypt('adminadmin');
         $user->save();
-        $user->roles()->attach($admin);
+        $user->roles()->attach($ADMIN);
 
-        $user = new User();
-        $user->name = 'PACD PACD';
-        $user->email = 'pacd@chedro.com';
-        $user->password = bcrypt('password');
-        $user->save();
-        $user->roles()->attach($pacd);
+
+        // TECHNICAL DIVISION
+
+        $CEPS  = Role::where('name', 'CEPS')->first();
 
         $user = new User();
         $user->name = 'CEPS CEPS';
         $user->email = 'ceps@chedro.com';
-        $user->password = bcrypt('password');
+        $user->password = bcrypt('adminadmin');
         $user->save();
-        $user->roles()->attach($ceps);
+        $user->roles()->attach($CEPS);
+
+        $ESII  = Role::where('name', 'ESII')->first();
+
+        $user = new User();
+        $user->name = 'ESII ESII';
+        $user->email = 'esii@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($ESII);
+
+        $EPS  = Role::where('name', 'EPS')->first();
+
+        $user = new User();
+        $user->name = 'EPS EPS';
+        $user->email = 'eps@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($EPS);
+
+        // END TECHNICAL DIVISION
+
+
+
+        // ADMINISTRATIVE
+
+        $CAO  = Role::where('name', 'CAO')->first();
 
         $user = new User();
         $user->name = 'CAO CAO';
         $user->email = 'cao@chedro.com';
-        $user->password = bcrypt('password');
+        $user->password = bcrypt('adminadmin');
         $user->save();
-        $user->roles()->attach($cao);
+        $user->roles()->attach($CAO);
+
+        $ACCT  = Role::where('name', 'ACCT')->first();
 
         $user = new User();
-        $user->name = 'SECT SECT';
-        $user->email = 'sect@chedro.com';
-        $user->password = bcrypt('password');
+        $user->name = 'ACCT ACCT';
+        $user->email = 'acct@chedro.com';
+        $user->password = bcrypt('adminadmin');
         $user->save();
-        $user->roles()->attach($sect);
+        $user->roles()->attach($ACCT);
 
+        $SECRETARY  = Role::where('name', 'SECRETARY')->first();
+
+        $user = new User();
+        $user->name = 'SECRETARY SECRETARY';
+        $user->email = 'secretary@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($SECRETARY);
+
+        $CASHIER  = Role::where('name', 'CASHIER')->first();
+
+        $user = new User();
+        $user->name = 'CASHIER CASHIER';
+        $user->email = 'cashier@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($CASHIER);
+
+        $RECORD  = Role::where('name', 'RECORD')->first();
+
+        $user = new User();
+        $user->name = 'RECORD RECORD';
+        $user->email = 'record@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($RECORD);
+
+        $PACD  = Role::where('name', 'PACD')->first();
+
+        $user = new User();
+        $user->name = 'PACD PACD';
+        $user->email = 'pacd@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($PACD);
+
+        $PURCHASER  = Role::where('name', 'PURCHASER')->first();
+        
+        $user = new User();
+        $user->name = 'PURCHASER PURCHASER';
+        $user->email = 'purchaser@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($PURCHASER);
+
+        // END ADMINISTRATIVE
+
+        
         
     }
 }

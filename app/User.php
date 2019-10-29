@@ -68,9 +68,56 @@ class User extends Authenticatable
         return false;
     }
 
-    public function isSuperAdmin()
+    public function isADMIN()
     {
-        return $this->hasRole('SA');
+        return $this->hasRole('ADMIN');
+    }
+
+
+    // TECHNICAL DIVISION
+
+    public function isCEPS()
+    {
+        return $this->hasRole('CEPS');
+    }
+
+    public function isESII()
+    {
+        return $this->hasRole('ESII');
+    }
+
+    public function isEPS()
+    {
+        return $this->hasRole('EPS');
+    }
+
+    // END TECHNICAL DIVISION
+
+    // ADMINISTRATIVE
+
+    public function isCAO()
+    {
+        return $this->hasRole('CAO');
+    }
+
+    public function isACCT()
+    {
+        return $this->hasRole('ACCT');
+    }
+
+    public function isSECRETARY()
+    {
+        return $this->hasRole('SECRETARY');
+    }
+
+    public function isCASHIER()
+    {
+        return $this->hasRole('CASHIER');
+    }
+
+    public function isRECORD()
+    {
+        return $this->hasRole('RECORD');
     }
 
     public function isPACD()
@@ -78,20 +125,11 @@ class User extends Authenticatable
         return $this->hasRole('PACD');
     }
 
-    public function isSECT()
+    public function isPURCHASER()
     {
-        return $this->hasRole('SECT');
+        return $this->hasRole('PURCHASER');
     }
 
-    public function isCAO()
-    {
-        return $this->hasRole('CAO');
-    }
-
-    public function isCEPS()
-    {
-        return $this->hasRole('CEPS');
-    }
-
+    // END ADMINISTRATIVE
 
 }

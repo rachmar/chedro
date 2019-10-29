@@ -11,13 +11,16 @@
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
-
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth'] ], function () {
+Route::resource('track', 'TrackController');
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth','checkrole'], 'roles' => ['ADMIN'] ], function () {
+});
+
+Route::group(['prefix' => 'pacd', 'middleware' => ['auth','checkrole'], 'roles' => ['PACD'] ], function () {
 	Route::resource('transaction', 'TransactionController');
-	Route::resource('track', 'TrackController');
 });
