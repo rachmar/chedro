@@ -48,15 +48,15 @@
         </a>
       </li>
 
-       <li class="{{ Request::segment(2) === 'log' ? 'active' : '' }}">
-        <a href="{{ url('admin/log')}}">
+       <li class="{{ Request::segment(2) === 'logs' ? 'active' : '' }}">
+        <a href="{{ url('admin/logs')}}">
           <i class="fa  fa-building-o" aria-hidden="true"></i>
             <span>Logs</span>
         </a>
       </li>
 
-      <li class="{{ Request::segment(2) === 'log' ? 'active' : '' }}">
-        <a href="{{ url('admin/log')}}">
+      <li class="{{ Request::segment(2) === 'logs' ? 'active' : '' }}">
+        <a href="{{ url('admin/logs')}}">
           <i class="fa  fa-building-o" aria-hidden="true"></i>
             <span>Reports</span>
         </a>

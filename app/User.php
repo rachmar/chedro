@@ -42,7 +42,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Model\Role', 'user_roles', 'user_id', 'role_id');
     }
 
- 
+
     public function hasAnyRole($roles)
     {
         if (is_array($roles))
@@ -128,6 +128,12 @@ class User extends Authenticatable
     public function isPURCHASER()
     {
         return $this->hasRole('PURCHASER');
+    }
+
+    public function delete()
+    {
+        $this->roles()->delete();
+        return parent::delete();
     }
 
     // END ADMINISTRATIVE
