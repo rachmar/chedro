@@ -32,7 +32,7 @@
               <td>{{ $document->name }}</td>
               <td>
                 <div class="row">
-                  <div class="col-xs-4">
+                  <div class="col-xs-5">
                     <form method="post" action="{{URL::to('/admin/document/'.$document->id)}}">
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="DELETE">
