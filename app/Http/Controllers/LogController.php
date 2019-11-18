@@ -17,7 +17,7 @@ class LogController extends Controller
     {
       $id = Auth::user()->id;
       $logs = Log::select()->get();
-      return view('pages.log',compact('logs'));
+      return view('pages.log.index',compact('logs'));
     }
 
     public function export()

@@ -15,7 +15,7 @@ class DocumentController extends Controller
     {
       $id = Auth::user()->id;
       $documents = Document::select('id','name')->get();
-      return view('pages.document',compact('documents'));
+      return view('pages.document.index',compact('documents'));
     }
 
     public function store(Request $request)

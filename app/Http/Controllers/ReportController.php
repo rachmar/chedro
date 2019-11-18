@@ -14,7 +14,7 @@ class ReportController extends Controller
     public function index()
     {
         //
-        return view('pages.admin.report.index');
+        return view('pages.report.index');
 
     }
 

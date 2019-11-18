@@ -23,7 +23,7 @@ class UserController extends Controller
       // print_r($users);
       // echo "</pre>";
       // $users = Role::select('*')->get();
-      return view('pages.user',compact('users','roles'));
+      return view('pages.user.index',compact('users','roles'));
     }
 
     public function delete($id){
