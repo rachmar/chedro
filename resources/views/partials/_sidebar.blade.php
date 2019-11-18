@@ -55,8 +55,8 @@
         </a>
       </li>
 
-      <li class="{{ Request::segment(2) === 'logs' ? 'active' : '' }}">
-        <a href="{{ url('admin/logs')}}">
+      <li class="{{ Request::segment(2) === 'report' ? 'active' : '' }}">
+        <a href="{{ url('admin/report')}}">
           <i class="fa  fa-building-o" aria-hidden="true"></i>
             <span>Reports</span>
         </a>

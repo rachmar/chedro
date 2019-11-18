@@ -33,6 +33,7 @@ Route::get('export', 'LogController@export')->name('export');
 Route::resource('track', 'TrackController');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth','checkrole'], 'roles' => ['ADMIN'] ], function () {
+	Route::resource('report', 'ReportController');
 });
 
 Route::group(['prefix' => 'pacd', 'middleware' => ['auth','checkrole'], 'roles' => ['PACD'] ], function () {
