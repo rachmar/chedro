@@ -23,12 +23,14 @@
 //Datatables
 @import '~datatables.net-bs/css/dataTables.bootstrap.css';
 
-//SweetAlert
+//SweetAlert1
 @import '~sweetalert2/dist/sweetalert2.css';
 
-//SweetAlert
-@import '~select2/dist/css/select2.min.css';
+//SweetAlert2
+@import '~sweetalert2/dist/sweetalert2.css';
 
-//ideal-postcodes-autocomplete
-@import '~ideal-postcodes-autocomplete/css/ideal-postcodes-autocomplete.css';
+//Custom 
+.swal2-popup {
+	font-size: 1.6rem !important;
+}
 

@@ -1,117 +1,164 @@
-@extends('layouts.document')
-
-
+@extends('layouts.admin')
 
 @section('content')
 <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Documents</h3>
-
-          <div class="box-tools">
-            <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
-              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-              <div class="input-group-btn">
-                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body table-responsive no-padding">
-          <table class="table table-hover">
-            <tbody><tr>
-              <th>ID</th>
-              <th>Document</th>
-            </tr>
-            @foreach($documents as $document)
-            <tr>
-              <td>{{ $document->id }}</td>
-              <td>{{ $document->name }}</td>
-              <td>
-                <div class="row">
-                  <div class="col-xs-5">
-                    <form method="post" action="{{URL::to('/admin/document/'.$document->id)}}">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-edit-{{ $document->id }}" ><i class="fa fa-edit" aria-hidden="true"></i></button>
-                        <button class="btn btn-danger" type="submit"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    </form>
-                  </div>
-
-                  <div class="modal fade in" id="modal-edit-{{ $document->id }}" style="display: none; padding-right: 16px;">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span></button>
-                          <h4 class="modal-title">Default Modal</h4>
-                        </div>
-                        <form action="{{URL::to('/admin/document/'.$document->id)}}" method="post">
-                          {{method_field('PUT')}}
-                          {{ csrf_field() }}
-                        <div class="modal-body">
-
-                            <div class="form-group">
-                              <label>Document:</label>
-                              <input type="text" class="form-control" name="name" id="name" value="{{ $document->name }}">
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                        </form>
-                      </div>
-                      <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                  </div>
-
-                </div>
-
-
-              </td>
-            </tr>
-            @endforeach
-
-          </tbody></table>
-        </div>
-        <!-- /.box-body -->
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+            <h3 class="box-title">List Of Documents</h3>
+            <button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-keyboard="false" data-backdrop="static" data-target="#AddDocument">
+              <i class="fa fa-fw fa-plus-circle"></i> Add Document
+            </button>
       </div>
-      <!-- /.box -->
+      <div class="box-body">
+
+        <table id="datatable" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th> Document ID</th>
+              <th> Document Name</th>
+              <th> Edit</th>
+              <th> Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($documents as $document)
+                <tr>
+                  <td>{{ $document->id }}</td>
+                  <td>{{ $document->name }}</td>
+                   <td width="10%">
+                    <button type="button" 
+                            class="btn btn-md btn-warning  btn-block pull-right"
+                            data-id="{{ $document->id }}"
+                            data-name="{{ $document->name }}"
+                            data-toggle="modal" data-keyboard="false" data-backdrop="static"  data-target="#EditDocument"> <i class="fa fa-fw fa-edit"></i> Edit
+                    </button>
+                  </td>                
+                  <td width="10%">
+                    <form action="{{ route('document.destroy', $document->id ) }}" class="delete" method="POST">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field()}}
+                      <button type="submit" class="btn btn-md btn-block pull-right btn-danger" ><i class="fa fa-fw fa-trash"></i> Delete</button>
+                    </form>
+                  </td>
+                </tr>
+            @endforeach
+          </tbody>
+          <tfoot>
+           <tr>
+              <th> Document ID</th>
+              <th> Document Name</th>
+              <th> Edit</th>
+              <th> Delete</th>
+            </tr>
+          </tfoot>
+
+        </table>
+
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="modal fade in" id="modal-add" style="display: none; padding-right: 16px;">
-    <div class="modal-dialog">
+
+
+<div class="modal fade" id="AddDocument">
+  <div class="modal-dialog">
+    <form  action="{{ route('document.store') }}" method="POST">
+      {{csrf_field()}}
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Default Modal</h4>
+          <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Add Document</h4>
         </div>
-        <form action="{{URL::to('/admin/document')}}" method="post">
-          {{ csrf_field() }}
         <div class="modal-body">
-
-            <div class="form-group">
-              <label>Document:</label>
-              <input type="text" class="form-control" name="name" id="name" placeholder="Document Name">
-            </div>
+  
+        <div class="form-group">
+          <label> Document Name</label>
+          <input type="text" id="name" name="name" class="form-control" required>
+        </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
         </div>
-        </form>
       </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+    </form> 
   </div>
+</div>
+
+
+<div class="modal fade" id="EditDocument">
+  <div class="modal-dialog">
+    <form  action="{{ route('document.update', 'update' ) }}" method="POST">
+      {{csrf_field()}}
+      {{ method_field('PUT') }}
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Edit Document</h4>
+        </div>
+        <div class="modal-body">
+        
+        <input type="hidden" id="id" name="id" class="form-control" >
+
+        <div class="form-group">
+          <label> Document Name</label>
+          <input type="text" id="name" name="name" class="form-control" required>
+        </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </form> 
+  </div>
+</div>
+
+@endsection
+
+@section('script')
+<script type="text/javascript">
+  $( document ).ready(function() {
+
+    $('#datatable').DataTable();
+
+    $('#EditDocument').on('show.bs.modal',function (e) {
+
+        var id= $(e.relatedTarget).data('id');
+        var name= $(e.relatedTarget).data('name');
+
+        $(e.currentTarget).find('input[id="id"]').val(id);
+        $(e.currentTarget).find('input[id="name"]').val(name);
+
+    });
+
+    $(".delete").submit(function (e) {
+      
+      e.preventDefault();
+
+      swal.fire({
+          title: 'Are you sure?',
+          text: 'You will not be able to recover this data!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, keep it'
+          }).then((result) => {
+          if (result.value) {
+            $(this).closest(".delete").off("submit").submit();
+          }else{
+            swal.fire('Cancelled','Your data is safe!','error')
+          }
+      });
+
+     });
+
+  });
+</script>
 @endsection

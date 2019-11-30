@@ -1,9 +1,8 @@
 @extends('layouts.auth')
 
-@section('page-extension', 'register-page')
 
 @section('content')
-<div class="register-box">
+<!-- <div class="register-box">
 
   <div class="register-logo">
     <a href=""><b>{{ config('app.name', 'Laravel') }}</b></a>
@@ -51,6 +50,5 @@
 
   </div>
 
-</div>
-
+</div> -->
 @endsection

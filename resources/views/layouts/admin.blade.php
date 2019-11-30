@@ -2,19 +2,12 @@
 <html>
 <head>
     @include('partials._header')
-
+    
     @yield('css')
-
-    <!-- Global Styles -->
-    <style type="text/css">
-        .swal2-popup {
-            font-size: 1.6rem !important;
-        }
-    </style>
 
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="skin-blue layout-top-nav ">
 
   <div id="app">
 
@@ -22,17 +15,18 @@
 
         @include('partials._navbar')
 
-        <aside class="main-sidebar">
-          @include('partials._sidebar')
-        </aside>
-
       <div class="content-wrapper">
 
-        <section class="content container-fluid">
+        <div class="container">
 
-          @yield('content')
+          <section class="content">
 
-        </section>
+            @yield('content')
+
+          </section>
+
+        </div>
+        
 
       </div>
 
@@ -42,12 +36,14 @@
 
   </div>
 
+
+
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" ></script>
 
   @yield('script')
 
-  <!-- Global Scripts -->
+  <!-- SweetAlert Trigger -->
   @if (session('status'))
     <script type="text/javascript">
       swal(

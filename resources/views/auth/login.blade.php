@@ -48,10 +48,10 @@
         </form>
 
         <br/>
-
+<!-- 
         <a href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a><br>
         <a href="{{ route('register') }}">Register a new membership</a>
-
+ -->
     </div>
 
 </div>
