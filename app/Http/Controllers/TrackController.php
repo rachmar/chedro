@@ -12,7 +12,18 @@ use Illuminate\Http\Request;
 
 
 class TrackController extends Controller
-{
+{   
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,11 +33,33 @@ class TrackController extends Controller
     {
         //
         $id = Auth::user()->id;
-        $transactions = Transaction::select('transactions.*','status.name')
-            ->join('status', 'transactions.status_id', '=', 'status.id')
-            ->where('assign_id', $id)
-            ->get();
-        return view('pages.track.index',compact('transactions'));
+
+        $transactions = Transaction::select(
+            'transactions.*',
+            'documents.name as document_name',
+            'institutions.name as institution_name',
+            'status.name as status_name'
+        )
+        ->join('status', 'transactions.status_id', '=', 'status.id')
+        ->join('documents', 'transactions.document_id', '=', 'documents.id')
+        ->join('institutions', 'transactions.institution_id', '=', 'institutions.id')
+        ->where('transactions.is_archive','<>', 1)
+        ->where('transactions.assign_id', $id)
+        ->orderBy('transactions.priority_id', 'desc')
+        ->get();   
+         
+        $statuses = Status::get();
+
+        $workers = User::whereHas('roles', function($q){
+            $q->where('roles.name', '<>', 'ADMIN');
+            $q->where('roles.name', '<>', 'PACD');
+            $q->where('users.id', '<>',  Auth::user()->id);
+        })->get();
+
+        return view('pages.track.index',compact('transactions', 'workers','statuses' , 'status'));
+
+
+
     }
 
     /**
@@ -59,19 +92,19 @@ class TrackController extends Controller
     public function show($id)
     {
 
-        $statuses = Status::get();
+        // $statuses = Status::get();
 
-        $transaction = Transaction::find($id);
+        // $transaction = Transaction::find($id);
 
-        $status = Status::find($transaction->status_id);
+        // $status = Status::find($transaction->status_id);
 
-        $workers = User::whereHas('roles', function($q){
-            $q->where('roles.name', '<>', 'ADMIN');
-            $q->where('roles.name', '<>', 'PACD');
-            $q->where('users.id', '<>',  Auth::user()->id);
-        })->get();
+        // $workers = User::whereHas('roles', function($q){
+        //     $q->where('roles.name', '<>', 'ADMIN');
+        //     $q->where('roles.name', '<>', 'PACD');
+        //     $q->where('users.id', '<>',  Auth::user()->id);
+        // })->get();
 
-        return view('pages.track.show',compact('transaction', 'workers','statuses' , 'status'));
+        // return view('pages.track.show',compact('transaction', 'workers','statuses' , 'status'));
     }
 
     /**
@@ -92,24 +125,49 @@ class TrackController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {   
+    public function update(Request $request, $action)
+    {
 
-        $transaction = Transaction::find($id);
-        $transaction->status_id = $request->status;
-        $transaction->priority_id = $request->priority;
-        $transaction->assign_id = $request->assign;
-        $transaction->save();
+        switch ($action) {
+            case 'update':
+
+                $transaction = Transaction::find($request->transaction_id);
+                $transaction->status_id = $request->status;
+                $transaction->assign_id = $request->assign;
+                $transaction->save();
 
 
-        $user = User::find($request->assign);
+                $user = User::find($request->assign);
 
-        $log = new Log;
-        $log->user_id = Auth::user()->id;
-        $log->description = "TRANSFER CONTROL NUM ".$transaction->control_id."  TO ".$user->name."  ON ";
-        $log->save();
+                $log = new Log;
+                $log->user_id = Auth::user()->id;
+                $log->description = "TRANSFER CONTROL NUM ".$transaction->control_id."  TO ".$user->name."  ON ";
+                $log->save();
 
-        return redirect('track')->with(['title'=>'Edited!','status'=>'User Succesfully Edited!','mode'=>'success']);
+                break;
+
+
+            case 'archive':
+                
+                $transaction = Transaction::find($request->transaction_id);
+                $transaction->is_archive = 1;
+                $transaction->is_archive_by = Auth::user()->id;
+                $transaction->save();
+
+                $log = new Log;
+                $log->user_id = Auth::user()->id;
+                $log->description = "ARCHIVE CONTROL NUM ".$transaction->control_id."  BY ".Auth::user()->name."  ON ";
+                $log->save();
+
+                break;
+            
+            default:
+                die("Please contact adminstrator");
+                break;
+        }
+        
+
+        return redirect('track')->with(['title'=>'Tranfer!','status'=>'Transaction Succesfully Transfer!','mode'=>'success']);
     }
 
     /**

@@ -14,7 +14,7 @@ class DocumentSeeder extends Seeder
     public function run()
     {
         DB::table('documents')->truncate();
-        
+
         $document = new Document();
         $document->name = 'Application for Government Permit/Recognition';
         $document->save();
@@ -71,6 +71,6 @@ class DocumentSeeder extends Seeder
         $document->name = 'Request for Appointment/appearance to a meeting or activity';
         $document->save();
 
-         
+
     }
 }

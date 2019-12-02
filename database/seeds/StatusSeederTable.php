@@ -71,7 +71,6 @@ class StatusSeederTable extends Seeder
         $status = new Status();
         $status->name = 'File';
         $status->save();
-
-     
+        
     }
 }

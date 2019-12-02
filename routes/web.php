@@ -27,13 +27,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Route::get('/admin/logs/','LogController@index');
 
-// Route::get('export', 'LogController@export')->name('export');
+Route::get('export', 'LogController@export')->name('export');
 
 
 Route::resource('track', 'TrackController');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth','checkrole'], 'roles' => ['ADMIN'] ], function () {
+	Route::resource('user', 'UserController');
 	Route::resource('document', 'DocumentController');
+	Route::resource('logs', 'LogController');
 	Route::resource('report', 'ReportController');
 });
 

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Auth;
 use App\User;
 use App\Model\Document;
+use App\Model\Institution;
 use App\Model\Transaction;
 use App\Model\Log;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 
@@ -20,8 +22,21 @@ class TransactionController extends Controller
     public function index()
     {
         $documents = Document::get();
-        
-        $control_id = uniqid();
+        $institutions = Institution::get();
+        $last_transaction = Transaction::latest('id')->first();
+
+        if(empty($last_transaction))
+        {
+          $sequence_id = 0;
+        }
+
+        else
+        {
+          $sequence_id = $last_transaction->id;
+        }
+
+        // $control_id = uniqid();
+        $control_id = date("Y-m-d")."-".sprintf("%010d", ++$sequence_id);
 
         $secretaries = User::whereHas('roles', function($q){
             $q->where('name', 'SECRETARY');
@@ -32,7 +47,7 @@ class TransactionController extends Controller
             ->where('priority_id', 0)
             ->get();
 
-        return view('pages.transaction.index',compact('documents','control_id','secretaries' , 'transactions'));
+        return view('pages.transaction.index',compact('documents','control_id','secretaries' , 'transactions' , 'institutions'));
 
 
     }
@@ -55,19 +70,58 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        //Institution and Document Conditions
+        if($request->institution_id == "99999999")
+        {
+          $institution = new Institution();
+          $institution->name = $request->institution_id_other;
+          $institution->save();
+          $institution_id_pointer = $institution->id;
+        }
+        else
+        {
+          $institution_id_pointer = $request->institution_id;
+        }
+
+
+        if($request->document_id == "99999999")
+        {
+          $document = new Document();
+          $document->name = $request->document_id_other;
+          $document->save();
+          $document_id_pointer = $document->id;
+        }
+        else
+        {
+          $document_id_pointer =  $request->document_id;
+        }
+
 
         $transaction = new Transaction;
         $transaction->control_id =  $request->control_id;
-        $transaction->document_id =  $request->document_id;
+        $transaction->institution_id = $institution_id_pointer;
+        $transaction->document_id =  $document_id_pointer;
         $transaction->assign_id =  $request->secretary_id;
         $transaction->subject =  $request->subject;
         $transaction->comments = $request->comments;
+        $transaction->priority_id = $request->priority_id;
+        if(!empty($request->uploadFile)){
+          $filename = $transaction->control_id . "." . $request->uploadFile->extension();
+          $transaction->image_filename = $filename;
+          // Storage::disk('public')->put("sdsds", "srsrasr");
+          $request->uploadFile->storeAs('', $filename, 'public');
+        }
+
         $transaction->save();
+
+
+        // print_r($file); exit;
 
         $log = new Log;
         $log->user_id = Auth::user()->id;
         $log->description = "GENERATE TRANSACTION USING CONTROL NUM ".$request->control_id." ON";
         $log->save();
+
 
 
         return redirect()->back()->with(['title'=>'Added!','status'=>'Successfully Added!','mode'=>'success']);

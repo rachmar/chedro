@@ -16,47 +16,54 @@ class UserController extends Controller
     public function index()
     {
       $id = Auth::user()->id;
-      $users = User::select('*')->get();
-      $roles = Role::select('*')->get();
+      $users = User::all();
+      $roles = Role::all();
 
-      // echo "<pre>";
-      // print_r($users);
-      // echo "</pre>";
-      // $users = Role::select('*')->get();
       return view('pages.user.index',compact('users','roles'));
     }
 
-    public function delete($id){
+    public function destroy($id){
 
       $user = User::find($id);
+      $user->roles()->detach();
       $user->delete();
 
-      return redirect('/admin/user');
+      return redirect()->back()->with(['title'=>'Deleted!','status'=>'User Succesfully Deleted!','mode'=>'success']);
+
 
     }
 
 
     public function store(Request $request)
     {
-      // print_r($request->input('name'));
-      $user = new User();
-      $user->name = $request->input('name');
-      $user->email = $request->input('email');
-      $user->password = Hash::make($request->input('password'));
-      $user->save();
-      $user->roles()->attach($request->input('role'));
-      $user->save();
 
-      return redirect('/admin/user');
+        $role  = Role::where('id',  $request->role)->first();
+
+        $user = new User();
+        $user->name =  $request->name;
+        $user->email =  $request->email;
+        $user->password =  Hash::make($request->password) ;
+        $user->save();
+        $user->roles()->attach($role);
+
+      return redirect()->back()->with(['title'=>'Added!','status'=>'User Succesfully Added!','mode'=>'success']);
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //   $user = Document::find($id);
-    //   $user->name = $request->input('name');
-    //   $user->save();
-    //
-    //   return redirect('/admin/document');
-    //
-    // }
+    public function update(Request $request, $id)
+    {
+
+      $role  = Role::where('id',  $request->role)->first();
+
+      $user = User::findOrFail($request->id);
+      $user->name =  $request->name;
+      $user->email =  $request->email;
+      $user->password =  Hash::make($request->password) ;
+      $user->save();
+
+      $user->roles()->detach();
+      $user->roles()->attach($role);
+
+      return redirect()->back()->with(['title'=>'Updated!','status'=>'User Succesfully Updated!','mode'=>'success']);
+    
+    }
 }

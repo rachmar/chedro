@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Auth;
+use App\Model\Transaction;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +27,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        view()->composer('partials._navbar',function($view){
+            $view->with('count_assign', Transaction::where('assign_id', Auth::user()->id)->count()  );   
+        });
+       
     }
 }

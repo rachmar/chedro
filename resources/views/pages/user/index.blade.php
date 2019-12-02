@@ -1,133 +1,210 @@
-@extends('layouts.user')
-
-
+@extends('layouts.admin')
 
 @section('content')
 <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Users</h3>
-
-          <div class="box-tools">
-            <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
-              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-              <div class="input-group-btn">
-                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body table-responsive no-padding">
-          <table class="table table-hover">
-            <tbody><tr>
-              <th>ID</th>
-              <th>Users</th>
-              <th>Role</th>
-              <td> </td>
-            </tr>
-            @foreach($users as $user)
-            <tr>
-              <td>{{ $user->id }}</td>
-              <td>{{ $user->name }}</td>
-              <td>{{ $user->roles[0]->description}}</td>
-              <td>
-                <div class="row">
-                  <div class="col-xs-4">
-                    <form method="post" action="{{URL::to('/admin/user/'.$user->id)}}">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-edit-{{ $user->id }}"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                        <button class="btn btn-danger" type="submit"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    </form>
-                  </div>
-                  <div class="modal fade in" id="modal-edit-{{ $user->id }}" style="display: none; padding-right: 16px;">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span></button>
-                          <h4 class="modal-title">Default Modal</h4>
-                        </div>
-                        <form action="{{URL::to('/admin/document/'.$user->id)}}" method="post">
-                          {{method_field('PUT')}}
-                          {{ csrf_field() }}
-                        <div class="modal-body">
-
-                            <div class="form-group">
-                              <label>Document:</label>
-                              <input type="text" class="form-control" name="name" id="name" value="{{ $user->name }}">
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                        </form>
-                      </div>
-                      <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                  </div>
-
-                </div>
-
-
-              </td>
-            </tr>
-            @endforeach
-
-          </tbody></table>
-        </div>
-        <!-- /.box-body -->
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+            <h3 class="box-title">List Of Users</h3>
+            <button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-keyboard="false" data-backdrop="static" data-target="#AddUser">
+              <i class="fa fa-fw fa-plus-circle"></i> Add User
+            </button>
       </div>
-      <!-- /.box -->
+      <div class="box-body">
+
+        <table id="datatable" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th> Name</th>
+              <th> Email</th>
+              <th> Edit</th>
+              <th> Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($users as $user)
+                <tr>
+                  <td>{{ $user->name }}</td>
+                  <td>{{ $user->email }}</td>
+
+                   <td width="10%">
+                    <button type="button" 
+                            class="btn btn-md btn-warning  btn-block pull-right"
+                            data-id="{{ $user->id }}"
+                            data-name="{{ $user->name }}"
+                            data-email="{{ $user->email }}"
+                            data-role="{{ $user->roles->first()->id }}"
+                            data-toggle="modal" data-keyboard="false" data-backdrop="static"  data-target="#EditUser"> <i class="fa fa-fw fa-edit"></i> Edit
+                    </button>
+                  </td>                
+                  <td width="10%">
+                    <form action="{{ route('user.destroy', $user->id ) }}" class="delete" method="POST">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field()}}
+                      <button type="submit" class="btn btn-md btn-block pull-right btn-danger" ><i class="fa fa-fw fa-trash"></i> Delete</button>
+                    </form>
+                  </td>
+                </tr>
+            @endforeach
+          </tbody>
+          <tfoot>
+           <tr>
+              <th> Name</th>
+              <th> Email</th>
+              <th> Edit</th>
+              <th> Delete</th>
+            </tr>
+          </tfoot>
+
+        </table>
+
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="modal fade in" id="modal-add" style="display: none; padding-right: 16px;">
-    <div class="modal-dialog">
+<div class="modal fade" id="AddUser">
+  <div class="modal-dialog">
+    <form  action="{{ route('user.store') }}" method="POST">
+      {{csrf_field()}}
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Create User</h4>
+          <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Add User</h4>
         </div>
-        <form action="{{URL::to('/admin/user')}}" method="post">
-          {{ csrf_field() }}
         <div class="modal-body">
+  
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" class="form-control" name="email" placeholder="e.g testemail@chedro.com" required>
+        </div>
 
-            <div class="form-group">
+         <div class="form-group">
+          <label>Username:</label>
+          <input type="text" class="form-control" name="name" placeholder="e.g John Doe" required>
+        </div>
 
-              <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-              <br/>
+        <div class="form-group">
+          <label>Password:</label>
+          <input type="password" class="form-control" name="password" placeholder="e.g 123!chedronickname" required>
+        </div>
 
-              <input type="text" class="form-control" name="name" id="name" placeholder="Name">
-              <br/>
-
-              <select class="form-control" id="role" name="role">
-                  <option value="" disabled selected>Please select role.</option>
-                @foreach($roles as $role);
-                  <option value="{{ $role->id }}">{{ $role->name }}</option>
-                @endforeach
-              </select>
-
-              <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-              <br/>
-            </div>
+        <div class="form-group">
+          <label>Role:</label>
+          <select class="form-control"  name="role">
+            @foreach($roles as $role);
+              <option value="{{ $role->id }}">{{ $role->name }}</option>
+            @endforeach
+          </select>
+        </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Create User</button>
+          <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
         </div>
-        </form>
       </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+    </form> 
   </div>
+</div>
+
+<div class="modal fade" id="EditUser">
+  <div class="modal-dialog">
+    <form  action="{{ route('user.update', 'update' ) }}" method="POST">
+      {{csrf_field()}}
+      {{ method_field('PUT') }}
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Edit Document</h4>
+        </div>
+        <div class="modal-body">
+        
+        <input type="hidden" id="id" name="id" class="form-control" >
+
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" class="form-control" name="email" id="email" placeholder="e.g testemail@chedro.com" required>
+        </div>
+
+         <div class="form-group">
+          <label>Username:</label>
+          <input type="text" class="form-control" name="name" id="name" placeholder="e.g John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label>Role:</label>
+          <select class="form-control" id="role" name="role">
+            @foreach($roles as $role);
+              <option value="{{ $role->id }}">{{ $role->name }}</option>
+            @endforeach
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Set New Password</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="e.g 123!chedronickname" required>
+        </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </form> 
+  </div>
+</div>
+
+@endsection
+
+@section('script')
+<script type="text/javascript">
+   $( document ).ready(function() {
+       
+     $('#datatable').DataTable({
+        "ordering": false,
+        "pageLength": 100
+      });
+
+    $('#EditUser').on('show.bs.modal',function (e) {
+
+        var id= $(e.relatedTarget).data('id');
+        var name= $(e.relatedTarget).data('name');
+        var email= $(e.relatedTarget).data('email');
+        var role= $(e.relatedTarget).data('role');
+
+        console.log(role);
+        $(e.currentTarget).find('input[id="id"]').val(id);
+        $(e.currentTarget).find('input[id="name"]').val(name);
+        $(e.currentTarget).find('input[id="email"]').val(email);
+        $(e.currentTarget).find('select[id="role"]').val(role);
+
+    });
+
+    $(".delete").submit(function (e) {
+      
+      e.preventDefault();
+
+      swal.fire({
+          title: 'Are you sure?',
+          text: 'You will not be able to recover this data!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, keep it'
+          }).then((result) => {
+          if (result.value) {
+            $(this).closest(".delete").off("submit").submit();
+          }else{
+            swal.fire('Cancelled','Your data is safe!','error')
+          }
+      });
+
+     });
+
+  });
+</script>
 @endsection
