@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         view()->composer('partials._navbar',function($view){
-            $view->with('count_assign', Transaction::where('assign_id', Auth::user()->id)->count()  );   
+            $view->with('count_assign', Transaction::where('transactions.is_archive','<>', 1)->where( 'assign_id', Auth::user()->id )->count()  );   
         });
        
     }

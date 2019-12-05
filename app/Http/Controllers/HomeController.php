@@ -28,8 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-
+        
         $transactions = Transaction::select(
             'transactions.*',
             'documents.name as document_name',
@@ -41,6 +40,7 @@ class HomeController extends Controller
         ->join('status', 'transactions.status_id', '=', 'status.id')
         ->join('documents', 'transactions.document_id', '=', 'documents.id')
         ->join('institutions', 'transactions.institution_id', '=', 'institutions.id')
+        ->where('transactions.is_archive','<>', 1)
         ->orderBy('transactions.priority_id', 'desc')
         ->get();   
        

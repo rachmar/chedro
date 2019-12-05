@@ -38,6 +38,12 @@
                         </a>
                     </li>
 
+                     <li class="{{ Request::segment(2) === 'archive' ? 'active' : '' }}">
+                        <a href="{{ url('admin/archive')}}">
+                            <span>Archives</span>
+                        </a>
+                    </li>
+
                     @endif @if (Auth::user()->isPACD())
 
                     <li class="{{ Request::segment(2) === 'transaction' ? 'active' : '' }}">
@@ -55,6 +61,12 @@
                     </li>
 
                     @endif
+
+                    <li>
+                        <a href="{{ url('home')}}">
+                            <span>Monitoring</span>
+                        </a>
+                    </li>
 
                 </ul>
 

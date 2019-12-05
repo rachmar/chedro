@@ -295,22 +295,71 @@
 
   $(".archive").submit(function (e) {
       e.preventDefault();
-      swal.fire({
+
+      // swal.fire({
+      //   title: 'Are you sure?',
+      //   text: 'This will archive the transaction.',
+      //   type: 'warning',
+      //   showCancelButton: true,
+      //   confirmButtonText: 'Yes, archive it!',
+      //   cancelButtonText: 'No, not yet'
+      //   }).then((result) => {
+      //   if (result.value) {
+      //     $(this).closest(".archive").off("submit").submit();
+      //   }else{
+      //     swal.fire('Cancelled','Your transaction is safe!','error');
+          
+      //   }
+      // });
+
+        swal.fire({
+        
         title: 'Are you sure?',
         text: 'This will archive the transaction.',
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, archive it!',
-        cancelButtonText: 'No, not yet'
+        cancelButtonText: 'No, not yet',
+        input: 'text',
+        inputPlaceholder: "Received By",
+        inputAttributes: {
+          autocapitalize: 'off',
+        },
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+
+          if (login === '') {
+            swal.showValidationMessage(`Required Received By!`)
+          }
+          console.log(login);
+          // return fetch(`//api.github.com/users/${login}`)
+          //   .then(response => {
+          //     if (!response.ok) {
+          //       throw new Error(response.statusText)
+          //     }
+          //     return response.json()
+          //   })
+          //   .catch(error => {
+          //     swal.showValidationMessage(
+          //       `Request failed: ${error}`
+          //     )
+          //   })
+
+          return 'asdasd';
+        },
+        allowOutsideClick: false,
         }).then((result) => {
-        if (result.value) {
+                  if (result.value) {
           $(this).closest(".archive").off("submit").submit();
         }else{
           swal.fire('Cancelled','Your transaction is safe!','error');
           
         }
-      });
+        })
   });
+
+
+
 
 
 </script>

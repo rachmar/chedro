@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\Model\Status;
-use App\Model\Log;
 use App\Model\Transaction;
 
-class ReportController extends Controller
+class ArchiveController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,22 +14,22 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
-
         $transactions = Transaction::select(
             'transactions.*',
             'documents.name as document_name',
             'institutions.name as institution_name',
-            'status.name as status_name'
+            'status.name as status_name',
+            'users.name as assign_name'
         )
+        ->join('users', 'transactions.assign_id', '=', 'users.id')
         ->join('status', 'transactions.status_id', '=', 'status.id')
         ->join('documents', 'transactions.document_id', '=', 'documents.id')
         ->join('institutions', 'transactions.institution_id', '=', 'institutions.id')
+        ->where('transactions.is_archive', 1)
+        ->orderBy('transactions.priority_id', 'desc')
         ->get();   
-         
-        return view('pages.report.index',compact('transactions'));
-
-
+       
+        return view('pages.archive.index',compact('transactions'));
     }
 
     /**
@@ -54,27 +51,6 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         //
-
-        $transactions = Transaction::select(
-            'transactions.*',
-            'documents.name as document_name',
-            'institutions.name as institution_name',
-            'status.name as status_name'
-        )
-        ->join('status', 'transactions.status_id', '=', 'status.id')
-        ->join('documents', 'transactions.document_id', '=', 'documents.id')
-        ->join('institutions', 'transactions.institution_id', '=', 'institutions.id');
-
-        if (isset($request->from) && isset($request->to)) {
-              $transactions = $transactions->whereBetween('transactions.created_at', array($request->from, $request->to));
-        }
-
-
-        $transactions = $transactions->get();
-        
-        return view('pages.report.index',compact('transactions'));
-
-
     }
 
     /**

@@ -37,6 +37,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','checkrole'], 'roles'
 	Route::resource('document', 'DocumentController');
 	Route::resource('logs', 'LogController');
 	Route::resource('report', 'ReportController');
+	Route::resource('archive', 'ArchiveController');
 });
 
 Route::group(['prefix' => 'pacd', 'middleware' => ['auth','checkrole'], 'roles' => ['PACD'] ], function () {

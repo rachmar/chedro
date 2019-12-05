@@ -2,83 +2,103 @@
 
 @section('content')
 <div class="row">
-  <div class="col-md-12">
-    <div class="box">
-      <div class="box-header with-border">
-          	<h3 class="box-title">Students</h3>
-          	<button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-keyboard="false" data-backdrop="static" data-target="#AddStudent">
-              <i class="fa fa-fw fa-plus-circle"></i> Add student
+
+  @if ( !Request::isMethod('post') )
+
+    <form  action="{{ route('report.store') }}" method="POST">
+      {{csrf_field()}}
+
+      <div class="form-group col-md-4">
+        <label>From Date</label>
+        <div class="input-group">
+            <input type="text" name="from" class="form-control datepicker" autocomplete="off">
+            <span class="input-group-addon"><i class="fa fa-fw fa-calendar"></i></span>
+        </div>
+      </div>
+      <div class="form-group col-md-4">
+        <label>To Date</label>
+        <div class="input-group">
+            <input type="text" name="to"  class="form-control datepicker" autocomplete="off">
+            <span class="input-group-addon"><i class="fa fa-fw fa-calendar"></i></span>
+        </div>
+      </div>
+      <div class="form-group col-md-4" style="margin-top: 25px;">
+         <button type="submit" class="btn btn-success  ">
+              Submit
             </button>
-      </div>
-      <div class="box-body">
+      </div>         
+    </form>
 
-        <table id="datatable" class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($documents as $document)
-                <tr>
-              	  <td>{{ $document->name }}</td>                
-                  <td width="10%">
-                    <form action="{{ route('document.destroy', $document->id ) }}" class="delete" method="POST">
-                        {{ method_field('DELETE') }}
-                        {{ csrf_field()}}
-                      <button type="submit" class="btn btn-md btn-block pull-right btn-danger" ><i class="fa fa-fw fa-trash"></i> Delete</button>
-                    </form>
-                  </td>
-                </tr>
-            @endforeach
-          </tbody>
-          <tfoot>
-           <tr>
-              <th>Name</th>
-              <th>Section</th>
-              <th>Parent</th>
-              <th>Phone</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </tfoot>
+  @else
 
-        </table>
+    <div id="printreport" class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Reports</h3>
+                <button class="btn btn-success pull-right no-print" onclick="printDiv()">Print Report</button>
+            </div>
+            <div class="box-body">
+                @if ( !$transactions->isEmpty() )
 
-      </div>
+                <table id="datatable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th> Control ID</th>
+                            <th> Institution Name</th>
+                            <th> Document Name </th>
+                            <th> Created On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach($transactions as $transaction)
+                        <tr>
+                            <td>{{ $transaction->control_id }}</td>
+                            <td>{{ $transaction->institution_name }}</td>
+                            <td>{{ $transaction->document_name }}</td>
+                            <td>{{ $transaction->created_at->format('Y-m-d h:i:s a') }}</td>
+                          </tr>
+                            @endforeach
+                    </tbody>
+                </table>
+
+                @else 
+
+                  No Transaction Found 
+
+                @endif
+
+            </div>
+            <div class="box-footer">
+               <a href="{{route('report.index')}}" class="btn btn-warning">Go Back</a>
+              </div>
+        </div>
     </div>
-  </div>
-</div>
 
+  @endif
+
+
+</div>
 @endsection
 
 @section('script')
 <script type="text/javascript">
-    $( document ).ready(function() {
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd'
+    });
 
-	  $('#datatable').DataTable();
+    function printDiv() {
+        var divName= "printreport";
 
-	  $(".delete").submit(function (e) {
-	  	
-		e.preventDefault();
+         var printContents = document.getElementById(divName).innerHTML;
+         var originalContents = document.body.innerHTML;
 
-		swal.fire({
-		    title: 'Are you sure?',
-		    text: 'You will not be able to recover this data!',
-		    type: 'warning',
-		    showCancelButton: true,
-		    confirmButtonText: 'Yes, delete it!',
-		    cancelButtonText: 'No, keep it'
-		    }).then((result) => {
-		    if (result.value) {
-		      $(this).closest(".delete").off("submit").submit();
-		    }else{
-		      swal.fire('Cancelled','Your data is safe!','error')
-		    }
-		});
+         document.body.innerHTML = printContents;
 
-	 });
+         window.print();
 
-	});
+         document.body.innerHTML = originalContents;
+    }
+
 </script>
 @endsection

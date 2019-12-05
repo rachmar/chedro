@@ -26,7 +26,7 @@ class CreateTransactionsTable extends Migration
             $table->string('image_filename')->nullable();
             $table->boolean('is_archive')->default(0);
             $table->integer('is_archive_by')->default(0);
-
+            $table->string('received_by')->nullable();
             $table->timestamps();
         });
     }

@@ -89,6 +89,13 @@ class UserSeederTable extends Seeder
         $user->save();
         $user->roles()->attach($SECRETARY);
 
+        $user = new User();
+        $user->name = 'SECRETARY2 SECRETARY2';
+        $user->email = 'secretar2y@chedro.com';
+        $user->password = bcrypt('adminadmin');
+        $user->save();
+        $user->roles()->attach($SECRETARY);
+
         $CASHIER  = Role::where('name', 'CASHIER')->first();
 
         $user = new User();

@@ -128,6 +128,11 @@ class TrackController extends Controller
     public function update(Request $request, $action)
     {
 
+
+        $returnTitle = 'Tranfer!';
+        $returnMsg= 'Transaction Succesfully Transfer!';
+
+
         switch ($action) {
             case 'update':
 
@@ -159,6 +164,9 @@ class TrackController extends Controller
                 $log->description = "ARCHIVE CONTROL NUM ".$transaction->control_id."  BY ".Auth::user()->name."  ON ";
                 $log->save();
 
+                $returnTitle = 'Archive!';
+                $returnMsg= 'Transaction Succesfully Archive!';
+
                 break;
             
             default:
@@ -167,7 +175,7 @@ class TrackController extends Controller
         }
         
 
-        return redirect('track')->with(['title'=>'Tranfer!','status'=>'Transaction Succesfully Transfer!','mode'=>'success']);
+        return redirect('track')->with(['title'=>$returnTitle,'status'=>$returnMsg,'mode'=>'success']);
     }
 
     /**
