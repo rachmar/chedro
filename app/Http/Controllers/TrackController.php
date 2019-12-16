@@ -6,6 +6,7 @@ use Auth;
 use App\User;
 use App\Model\Status;
 use App\Model\Log;
+use App\Model\Attachment;
 
 use App\Model\Transaction;
 use Illuminate\Http\Request;
@@ -92,19 +93,21 @@ class TrackController extends Controller
     public function show($id)
     {
 
-        // $statuses = Status::get();
+        $statuses = Status::get();
 
-        // $transaction = Transaction::find($id);
+        $transaction = Transaction::find($id);
 
-        // $status = Status::find($transaction->status_id);
+        $status_f = Status::find($transaction->status_id);
 
-        // $workers = User::whereHas('roles', function($q){
-        //     $q->where('roles.name', '<>', 'ADMIN');
-        //     $q->where('roles.name', '<>', 'PACD');
-        //     $q->where('users.id', '<>',  Auth::user()->id);
-        // })->get();
+        $attachments = Attachment::where('control_id', $transaction->control_id)->get();
 
-        // return view('pages.track.show',compact('transaction', 'workers','statuses' , 'status'));
+        $workers = User::whereHas('roles', function($q){
+            $q->where('roles.name', '<>', 'ADMIN');
+            $q->where('roles.name', '<>', 'PACD');
+            $q->where('users.id', '<>',  Auth::user()->id);
+        })->get();
+
+        return view('pages.track.show',compact('transaction','attachments', 'workers','statuses' , 'status_f'));
     }
 
     /**
@@ -134,19 +137,34 @@ class TrackController extends Controller
 
 
         switch ($action) {
+
             case 'update':
 
                 $transaction = Transaction::find($request->transaction_id);
+
+                if(!empty($request->comments)){
+                    $transaction->comments .= "====[".Auth::user()->name."]====<br/>".$request->comments."<br/><br/>";
+                }
+
                 $transaction->status_id = $request->status;
                 $transaction->assign_id = $request->assign;
                 $transaction->save();
 
+                if(!empty($request->uploadFile)){
 
-                $user = User::find($request->assign);
+                    $attachment = new Attachment;
+                    $filename = $transaction->control_id."-".uniqid().".".$request->uploadFile->extension();
+                    $attachment->control_id = $transaction->control_id;
+                    $attachment->image_filename = $filename;
+                    $attachment->save();
+                    $request->uploadFile->storeAs('', $filename, 'public');
+
+                }
+
 
                 $log = new Log;
                 $log->user_id = Auth::user()->id;
-                $log->description = "TRANSFER CONTROL NUM ".$transaction->control_id."  TO ".$user->name."  ON ";
+                $log->description = "TRANSFER CONTROL NUM ".$transaction->control_id."  TO ".Auth::user()->name."  ON ".date('l, jS \of F Y h:i A');
                 $log->save();
 
                 break;
@@ -161,21 +179,43 @@ class TrackController extends Controller
 
                 $log = new Log;
                 $log->user_id = Auth::user()->id;
-                $log->description = "ARCHIVE CONTROL NUM ".$transaction->control_id."  BY ".Auth::user()->name."  ON ";
+                $log->description = "ARCHIVE CONTROL NUM ".$transaction->control_id."  BY ".Auth::user()->name."  ON ".date('l, jS \of F Y h:i A');
                 $log->save();
 
                 $returnTitle = 'Archive!';
                 $returnMsg= 'Transaction Succesfully Archive!';
 
                 break;
+
+            case 'received':
+                
+                $transaction = Transaction::find($request->transaction_id);
+                $transaction->is_archive = 1;
+                $transaction->is_archive_by = Auth::user()->id;
+                $transaction->received_by = $request->name;
+                $transaction->save();
+
+                $log = new Log;
+                $log->user_id = Auth::user()->id;
+                $log->description = "CONTROL NUM ".$transaction->control_id." WAS RECEIVED BY ".$request->name." PROCESSED BY ".Auth::user()->name."  ON ".date('l, jS \of F Y h:i A');
+                $log->save();
+
+                $returnTitle = 'Received!';
+                $returnMsg= 'Transaction Succesfully Received!';
+
+                break;
             
             default:
                 die("Please contact adminstrator");
                 break;
-        }
-        
 
+
+        }
+
+        
+        
         return redirect('track')->with(['title'=>$returnTitle,'status'=>$returnMsg,'mode'=>'success']);
+        
     }
 
     /**

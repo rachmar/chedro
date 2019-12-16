@@ -65,7 +65,7 @@
             <div class="row">
               <div class="form-group col-md-12">
                 <label for="subject">Subject <span>*</span></label>
-                <input type="text" id="subject" class="form-control" name="subject" value="" required>
+                <input type="text" id="subject" class="form-control" name="subject" autocomplete="off" required>
               </div>
               <div class="form-group col-md-12">
                 <label for="comments">Comments <span>*</span></label>
@@ -73,7 +73,8 @@
               </div>
              
               <div class="form-group col-md-12">
-                <label for="uploadFile">Upload Image</label>
+                
+                <label for="uploadFile">Attachement</label>
                 <input type="file" name="uploadFile">
               </div>
             </div>

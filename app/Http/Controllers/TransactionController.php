@@ -7,6 +7,7 @@ use App\User;
 use App\Model\Document;
 use App\Model\Institution;
 use App\Model\Transaction;
+use App\Model\Attachment;
 use App\Model\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -103,13 +104,22 @@ class TransactionController extends Controller
         $transaction->document_id =  $document_id_pointer;
         $transaction->assign_id =  $request->secretary_id;
         $transaction->subject =  $request->subject;
-        $transaction->comments = $request->comments;
+
+        $transaction->comments = "====[".Auth::user()->name."]====<br/>".$request->comments."<br/><br/>";
+
         $transaction->priority_id = $request->priority_id;
+        
         if(!empty($request->uploadFile)){
-          $filename = $transaction->control_id . "." . $request->uploadFile->extension();
-          $transaction->image_filename = $filename;
-          // Storage::disk('public')->put("sdsds", "srsrasr");
-          $request->uploadFile->storeAs('', $filename, 'public');
+
+            $attachment = new Attachment;
+
+            $filename = $transaction->control_id."-".uniqid()."." . $request->uploadFile->extension();
+            $attachment->control_id = $request->control_id;
+            $attachment->image_filename = $filename;
+            $attachment->save();
+
+            $request->uploadFile->storeAs('', $filename, 'public');
+
         }
 
         $transaction->save();
@@ -119,7 +129,7 @@ class TransactionController extends Controller
 
         $log = new Log;
         $log->user_id = Auth::user()->id;
-        $log->description = "GENERATE TRANSACTION USING CONTROL NUM ".$request->control_id." ON";
+        $log->description = "GENERATE TRANSACTION USING CONTROL NUM ".$request->control_id." ON ".date('l, jS \of F Y h:i A');
         $log->save();
 
 

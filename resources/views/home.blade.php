@@ -15,6 +15,8 @@
                         <tr>
                             <th> Control ID</th>
                             <th> Current Holder</th>
+                            <th> Institution Name</th>
+                            <th> Document Name</th>
                             <th> Priority </th>
                             <th> Action </th>
                             <th> Created On</th>
@@ -26,6 +28,9 @@
                         <tr>
                             <td>{{ $transaction->control_id }}</td>
                             <td>{{ $transaction->assign_name }}</td>
+                            <td>{{ $transaction->institution_name }}</td>
+                            <td>{{ $transaction->document_name }}</td>
+
                             <td>
                                 @if ( $transaction->priority_id === 1 )
                                 <span class="label  bg-green">Lease Priority</span> @elseif ( $transaction->priority_id === 2 )
@@ -59,9 +64,8 @@
   <script type="text/javascript">
     $( document ).ready(function() {
       	$('#datatable').DataTable({
-		  "ordering": false,
-		  "pageLength": 100
-		});
+            pageLength: 100,
+        });
     });
  </script>
 @endsection
