@@ -25,24 +25,24 @@ class DocumentController extends Controller
       $document->name = $request->input('name');
       $document->save();
 
-      return redirect('/admin/document');
+      return redirect('/admin/document')->with(['title'=>"Success!",'status'=>"Successfully Stored",'mode'=>'success']);
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
       $document = Document::find($id);
       $document->delete();
 
-      return redirect('/admin/document');
+      return redirect('/admin/document')->with(['title'=>"Success!",'status'=>"Successfully Delete",'mode'=>'success']);
     }
 
     public function update(Request $request, $id)
     {
-      $document = Document::find($id);
+      $document = Document::find($request->id);
       $document->name = $request->input('name');
       $document->save();
 
-      return redirect('/admin/document');
+      return redirect('/admin/document')->with(['title'=>"Success!",'status'=>"Successfully Update",'mode'=>'success']);
 
     }
 }

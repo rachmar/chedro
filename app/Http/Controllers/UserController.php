@@ -16,7 +16,11 @@ class UserController extends Controller
     public function index()
     {
       $id = Auth::user()->id;
-      $users = User::all();
+
+      $users = User::whereHas('roles', function($q){
+            $q->where('name', '<>' ,'ADMIN');
+      })->get();
+
       $roles = Role::all();
 
       return view('pages.user.index',compact('users','roles'));

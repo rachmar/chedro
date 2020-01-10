@@ -13,7 +13,7 @@
         </div>
       </div>
 
-        <form action="{{ route('transaction.store') }}" method="POST" enctype="multipart/form-data">
+        <form class="generate" action="{{ route('transaction.store') }}" method="POST" enctype="multipart/form-data">
           {{csrf_field()}}
 
           <div class="box-body">
@@ -27,7 +27,7 @@
                   @foreach ($institutions as $institution)
                     <option value="{{ $institution->id }}">{{ $institution->name }}</option>
                   @endforeach
-                    <option value="99999999">Other...</option>
+                    <!-- <option value="99999999">Other...</option> -->
                 </select>
                 <input type="text" class="form-control" id="institution_id_other" name="institution_id_other" value="" placeholder="Institution..." style="display: none;">
               </div>
@@ -37,7 +37,7 @@
                   @foreach ($documents as $document)
                     <option value="{{ $document->id }}">{{ $document->name }}</option>
                   @endforeach
-                    <option value="99999999">Other...</option>
+                    <!-- <option value="99999999">Other...</option> -->
                 </select>
                 <input type="text" class="form-control" id="document_id_other" name="document_id_other" value="" placeholder="Document..." style="display: none;">
               </div>
@@ -125,6 +125,38 @@
 
 @section('script')
 <script type="text/javascript">
+  $(".generate").submit(function (e) {
+
+      var ins_id = $('#institution_id').val();
+      var doc_id = $('#document_id').val();
+      var crl_id = '{{ strtoupper($control_id) }}';
+      var link = "{{ route('qrcode.index') }}";
+
+      e.preventDefault();
+
+      swal.fire({
+        title: 'Are you sure?',
+        text: 'This will generate the transaction.',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, generate it!',
+        cancelButtonText: 'No, not yet'
+        }).then((result) => {
+        if (result.value) {
+          window.open(link + "?crl_id="+crl_id+"&doc_id="+doc_id+"&ins_id="+ins_id);
+          $(this).closest(".generate").off("submit").submit();
+        }else{
+          swal.fire('Cancelled','Your transaction is safe!','error');
+          
+        }
+      });
+
+        
+  });
+
+</script>
+
+<script type="text/javascript">
 
   $("#institution_id").change(function() {
 
@@ -162,6 +194,10 @@
   function checkFieldHaveValue(){
 
   }
+
+
+
+
 
 </script>
 @endsection

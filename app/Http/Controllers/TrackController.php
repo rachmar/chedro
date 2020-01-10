@@ -10,6 +10,7 @@ use App\Model\Attachment;
 
 use App\Model\Transaction;
 use Illuminate\Http\Request;
+use App\Model\Comment;
 
 
 class TrackController extends Controller
@@ -95,11 +96,30 @@ class TrackController extends Controller
 
         $statuses = Status::get();
 
-        $transaction = Transaction::find($id);
+        $transaction = Transaction::select(
+            'transactions.*',
+            'documents.name as document_name',
+            'institutions.name as institution_name',
+            'status.name as status_name',
+            'status.id as status_id'
+        )
+        ->join('status', 'transactions.status_id', '=', 'status.id')
+        ->join('documents', 'transactions.document_id', '=', 'documents.id')
+        ->join('institutions', 'transactions.institution_id', '=', 'institutions.id')
+        ->find($id);
 
-        $status_f = Status::find($transaction->status_id);
+        // $status_f = Status::find($transaction->status_id);
 
         $attachments = Attachment::where('control_id', $transaction->control_id)->get();
+
+        $comments = Comment::select(
+            'users.name as user',
+            'comments.message',
+            'comments.created_at'
+        )
+        ->join('users', 'comments.user_id', '=', 'users.id')
+        ->where('control_id', $transaction->control_id)
+        ->get();
 
         $workers = User::whereHas('roles', function($q){
             $q->where('roles.name', '<>', 'ADMIN');
@@ -107,7 +127,7 @@ class TrackController extends Controller
             $q->where('users.id', '<>',  Auth::user()->id);
         })->get();
 
-        return view('pages.track.show',compact('transaction','attachments', 'workers','statuses' , 'status_f'));
+        return view('pages.track.show',compact('transaction','attachments', 'comments' , 'workers','statuses' , 'status_f'));
     }
 
     /**
@@ -143,7 +163,13 @@ class TrackController extends Controller
                 $transaction = Transaction::find($request->transaction_id);
 
                 if(!empty($request->comments)){
-                    $transaction->comments .= "====[".Auth::user()->name."]====<br/>".$request->comments."<br/><br/>";
+
+                    $comment = new Comment;
+                    $comment->user_id = Auth::user()->id;
+                    $comment->control_id = $transaction->control_id;
+                    $comment->message = $request->comments;
+                    $comment->save();
+
                 }
 
                 $transaction->status_id = $request->status;

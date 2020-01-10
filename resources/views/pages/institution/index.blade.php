@@ -5,9 +5,9 @@
   <div class="col-md-12">
     <div class="box">
       <div class="box-header with-border">
-            <h3 class="box-title">List Of Documents</h3>
+            <h3 class="box-title">List Of Institutions</h3>
             <button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-keyboard="false" data-backdrop="static" data-target="#AddDocument">
-              <i class="fa fa-fw fa-plus-circle"></i> Add Document
+              <i class="fa fa-fw fa-plus-circle"></i> Add Institution
             </button>
       </div>
       <div class="box-body">
@@ -15,27 +15,27 @@
         <table id="datatable" class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th> Document ID</th>
-              <th> Document Name</th>
+              <th> Institution ID</th>
+              <th> Institution Name</th>
               <th> Edit</th>
               <th> Delete</th>
             </tr>
           </thead>
           <tbody>
-            @foreach($documents as $document)
+            @foreach($institutions as $institution)
                 <tr>
-                  <td>{{ $document->id }}</td>
-                  <td>{{ $document->name }}</td>
+                  <td>{{ $institution->id }}</td>
+                  <td>{{ $institution->name }}</td>
                    <td width="10%">
                     <button type="button" 
                             class="btn btn-md btn-warning  btn-block pull-right"
-                            data-id="{{ $document->id }}"
-                            data-name="{{ $document->name }}"
+                            data-id="{{ $institution->id }}"
+                            data-name="{{ $institution->name }}"
                             data-toggle="modal" data-keyboard="false" data-backdrop="static"  data-target="#EditDocument"> <i class="fa fa-fw fa-edit"></i> Edit
                     </button>
                   </td>                
                   <td width="10%">
-                    <form action="{{ route('document.destroy', $document->id ) }}" class="delete" method="POST">
+                    <form action="{{ route('institution.destroy', $institution->id ) }}" class="delete" method="POST">
                         {{ method_field('DELETE') }}
                         {{ csrf_field()}}
                       <button type="submit" class="btn btn-md btn-block pull-right btn-danger" ><i class="fa fa-fw fa-trash"></i> Delete</button>
@@ -46,8 +46,8 @@
           </tbody>
           <tfoot>
            <tr>
-              <th> Document ID</th>
-              <th> Document Name</th>
+              <th> Institution ID</th>
+              <th> Institution Name</th>
               <th> Edit</th>
               <th> Delete</th>
             </tr>
@@ -64,18 +64,18 @@
 
 <div class="modal fade" id="AddDocument">
   <div class="modal-dialog">
-    <form  action="{{ route('document.store') }}" method="POST">
+    <form  action="{{ route('institution.store') }}" method="POST">
       {{csrf_field()}}
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Add Document</h4>
+          <h4 class="modal-title">Add Institution</h4>
         </div>
         <div class="modal-body">
   
         <div class="form-group">
-          <label> Document Name</label>
+          <label> Institution Name</label>
           <input type="text" name="name" class="form-control" required>
         </div>
 
@@ -92,21 +92,21 @@
 
 <div class="modal fade" id="EditDocument">
   <div class="modal-dialog">
-    <form  action="{{ route('document.update', 'update' ) }}" method="POST">
+    <form  action="{{ route('institution.update', 'update' ) }}" method="POST">
       {{csrf_field()}}
       {{ method_field('PUT') }}
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Edit Document</h4>
+          <h4 class="modal-title">Edit Institution</h4>
         </div>
         <div class="modal-body">
         
         <input type="hidden" id="id" name="id" class="form-control" >
 
         <div class="form-group">
-          <label> Document Name</label>
+          <label> Institution Name</label>
           <input type="text" id="name" name="name" class="form-control" required>
         </div>
 

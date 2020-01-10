@@ -22,7 +22,6 @@ class CreateTransactionsTable extends Migration
             $table->integer('priority_id')->default(0);
             $table->integer('assign_id')->default(0);
             $table->string('subject')->nullable();
-            $table->text('comments')->nullable();
             $table->boolean('is_archive')->default(0);
             $table->integer('is_archive_by')->default(0);
             $table->string('received_by')->nullable();

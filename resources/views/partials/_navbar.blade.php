@@ -26,6 +26,12 @@
                         </a>
                     </li>
 
+                    <li class="{{ Request::segment(2) === 'institution' ? 'active' : '' }}">
+                        <a href="{{ url('admin/institution')}}">
+                            <span>Institution</span>
+                        </a>
+                    </li>
+
                     <li class="{{ Request::segment(2) === 'logs' ? 'active' : '' }}">
                         <a href="{{ url('admin/logs')}}">
                             <span>Logs</span>
@@ -79,7 +85,7 @@
                     <li class="dropdown user user-menu">
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <img src="img/logo/CHED-LOGO.png" class="user-image" alt="User Image">
+                            <img src="{{ asset('img/logo/CHED-LOGO.png') }} " class="user-image" alt="User Image">
                             <span class="hidden-xs">{{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu">

@@ -4,7 +4,7 @@
 <div class="login-box">
 
     <div class="login-logo">
-        <a href=""><b>{{ config('app.name', 'Laravel') }}</b></a>
+        <a href=""><b>{{ config('app.name', 'CHEDRO') }}</b></a>
     </div>
 
     <div class="login-box-body">

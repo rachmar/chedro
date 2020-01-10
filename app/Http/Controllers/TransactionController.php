@@ -8,10 +8,13 @@ use App\Model\Document;
 use App\Model\Institution;
 use App\Model\Transaction;
 use App\Model\Attachment;
+use App\Model\Comment;
+
 use App\Model\Log;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
+use \Milon\Barcode\DNS2D;
 
 class TransactionController extends Controller
 {
@@ -25,6 +28,9 @@ class TransactionController extends Controller
         $documents = Document::get();
         $institutions = Institution::get();
         $last_transaction = Transaction::latest('id')->first();
+
+        // $d = new DNS2D();
+        // echo $d->getBarcodeHTML("9780691147727", "QRCODE", 3,3);
 
         if(empty($last_transaction))
         {
@@ -104,23 +110,30 @@ class TransactionController extends Controller
         $transaction->document_id =  $document_id_pointer;
         $transaction->assign_id =  $request->secretary_id;
         $transaction->subject =  $request->subject;
-
-        $transaction->comments = "====[".Auth::user()->name."]====<br/>".$request->comments."<br/><br/>";
-
         $transaction->priority_id = $request->priority_id;
-        
+
+
+        if(!empty($request->comments)){
+
+            $comment = new Comment;
+            $comment->user_id = Auth::user()->id;
+            $comment->control_id = $request->control_id;
+            $comment->message = $request->comments;
+            $comment->save();
+
+        }
+
         if(!empty($request->uploadFile)){
 
-            $attachment = new Attachment;
-
             $filename = $transaction->control_id."-".uniqid()."." . $request->uploadFile->extension();
+            $attachment = new Attachment;
             $attachment->control_id = $request->control_id;
             $attachment->image_filename = $filename;
             $attachment->save();
-
             $request->uploadFile->storeAs('', $filename, 'public');
 
         }
+
 
         $transaction->save();
 

@@ -27,7 +27,7 @@
 					</div>
 
 					<div class="pull-right" style="margin-right: 10px;">
-						<span class="label bg-maroon">{{$status_f->name}}</span>
+						<span class="label bg-maroon">{{$transaction->status_name}}</span>
 					</div>
 
 			      </div>
@@ -37,14 +37,35 @@
 
 				        <div class="row">
 			             
-			             <div class="form-group col-md-12">
+			             <div class="form-group col-md-6">
+			                <label for="uploadFile">Institution Name</label>
+			                <p>{{ $transaction->institution_name }}</p>
+			              </div>
+
+			              <div class="form-group col-md-6">
+			                <label for="uploadFile">Document Name</label>
+			                <p>{{ $transaction->document_name }}</p>
+			              </div>
+
+			              <div class="form-group col-md-12">
 			                <label for="uploadFile">Subject</label>
 			                <p>{{ $transaction->subject }}</p>
 			              </div>
 
 			              <div class="form-group col-md-12">
 			                <label for="uploadFile">Comments</label>
-			                <p><?php echo html_entity_decode($transaction->comments); ?></p>
+			                <div>
+			                @if ( !$comments->isEmpty() )
+		          				@foreach($comments as $comment)
+		               				<dl>
+									  <dt>{{ $comment->user }} @ {{ $comment->created_at->format('h:i a') }}</b></dt>
+									  <dd>{{ $comment->message }}</dd>
+									</dl>
+		            			@endforeach
+		                	@else 
+		                		No Comments Found 
+		                	@endif
+		                	</div>
 			              </div>
 
 
@@ -98,9 +119,7 @@
 								        	<option value="0">Please Choose</option>
 							                @foreach ($statuses as $status)
 							                  <option value="{{ $status->id }}" 
-
-							                  	{{ ( $status->id == $status_f->id) ? 'selected' : '' }}
-
+							                  	{{ ( $status->id === $transaction->status_id) ? 'selected' : '' }}
 							                  	>{{ $status->name }}</option>
 							                @endforeach
 						              	</select>
